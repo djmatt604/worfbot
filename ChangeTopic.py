@@ -6,6 +6,8 @@ All of the code for the firehose monitor and trigger detection is from here:
 https://www.fullstackpython.com/blog/build-first-slack-bot-python.html
 
 I only did the part where we figure out who's working and post the topic change.
+There are some dependencies you need to resolve before this'll work.  Read 
+the comments below for the deets.  
 **********************************************************************************
 """
 
@@ -17,10 +19,12 @@ import sys;
 import json;
 from slackclient import SlackClient;
 
-# Let's do some Slack setup stuff first.
+# Let's do some Slack setup stuff first. You need a bot user on your team named "@worfbot".
 BOT_NAME = 'worfbot'
 
-# Worfbot's ID as an environment variable
+# Worfbot's ID as an environment variable.
+# Make an API call to Slack for all users on your team and save Worfbot's ID as an environment variable.
+# Then this will work.
 BOT_ID = os.environ.get("BOT_ID")
 
 # constants (the Bot's ID for the listener, and the command trigger).
@@ -28,6 +32,7 @@ AT_BOT = ("<@" + BOT_ID + ">")
 COMMAND = ("change")
 
 # Make sure we can find the bot in-channel. Invite it if you hit an error.
+# NOTE: You need to save the API token for your bot user as an environment variable before this will work.
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 if __name__ == "__main__":
     api_call = slack_client.api_call("users.list")
