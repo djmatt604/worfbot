@@ -1,3 +1,15 @@
+"""
+**********************************************************************************
+Worfbot!  A script that changes a channel topic in Slack.
+
+All of the code for the firehose monitor and trigger detection is from here:
+https://www.fullstackpython.com/blog/build-first-slack-bot-python.html
+
+I only did the part where we figure out who's working and post the topic change.
+**********************************************************************************
+"""
+
+
 import time;
 import urllib2;
 import os;
@@ -35,8 +47,7 @@ def handle_command(command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "Say what?  I just change channel topics when I'm told. Use the *" + COMMAND + \
-               "* command and I might be a bit more friendly."
+    response = "Something's wrong.  Check out my source file or console for details."
     if not command.startswith(COMMAND):
 	slack_client.api_call("chat.postMessage", channel=channel,
                      text=("Sorry, I only respond to *" + COMMAND + "*. Try that."), as_user=True)
@@ -55,12 +66,12 @@ def handle_command(command, channel):
 	    regionCode = "DUB"
 	else:
 	    regionCode = "Unknown"
-	# Read in the specialists.txt file and convert to a string array. 
+	# Read in the specialists.txt file and turn it into a list
 	file = urllib2.urlopen('http://pastebin.com/raw/NJRPMV4m')
 	data=file.read().decode('utf-8')
 	data = data.replace('\r\n','|')
 	tzSpecialists = data.split('|')
-	# Run through source file, and exit with agent detail if we find an element
+	# Run through the list, and exit with on-duty agent detail if we find an element
 	# where "regionCode" is a substring. Exit w/ error if not.
 	# Lastly, print out the channel topic.
 	for i, elem in enumerate(tzSpecialists):
